@@ -20,7 +20,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/palladium/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -33,32 +33,20 @@ public class UserController {
     PasswordEncoder encoder;
 
     @GetMapping("/get/all")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_DEVELOPER')")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    @GetMapping("/get/all/roles")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN')")
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
-
-    @GetMapping("/get/all/users")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN')")
-    public List<User> getUsersByRoleName(@RequestParam("name") ERole name) {
-        return userRepository.findByRoles_Name(name);
-    }
-
     @GetMapping("/get/user")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_EXECUTOR')")
+    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_TEACHER') or hasRole('ROLE_STUDENT')")
     public User getUserById(@RequestParam(value = "id") long id) {
         return userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User with id " + id + " not found"));
     }
 
     @PutMapping("/edit")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_TEACHER') or hasRole('ROLE_STUDENT')")
     public ResponseEntity<?> editUser(@RequestBody SignupRequest user,
                                       @RequestParam(value = "id") long id) {
 
@@ -118,7 +106,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("hasRole('ROLE_DEVELOPER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_DEVELOPER')")
     public ResponseEntity<?> deleteUser(@RequestParam(value = "id") long id) {
         userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User with id " + id + " not found")
