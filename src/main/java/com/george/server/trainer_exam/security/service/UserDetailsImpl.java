@@ -18,7 +18,6 @@ public class UserDetailsImpl implements UserDetails {
     private final String fullName;
     private final String infoAboutUser;
     private final String email;
-
     private final String username;
     @JsonIgnore
     private final String password;

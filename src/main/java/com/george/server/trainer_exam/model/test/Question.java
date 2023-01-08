@@ -21,10 +21,14 @@ public class Question {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "questions_answers",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "answer_id"))
     private Set<Answer> answers = new LinkedHashSet<>();
+
+    public Question() {
+
+    }
 
 }
